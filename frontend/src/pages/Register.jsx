@@ -10,9 +10,9 @@ const Register = () => {
 
     function handelForm(e){
         e.preventDefault();
-        fetch("/api/regdata",{
+         fetch("/api/regdata",{
             method:"POST",
-            headers:{"content-Type":"application.json"},
+            headers:{"Content-Type":"application.json"},
             body:JSON.stringify(form),
         });
     }

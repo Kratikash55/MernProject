@@ -1,4 +1,4 @@
-const userCollection = require("../models/Product");
+const userCollection = require("../models/user");
 const bcrypt = require("bcrypt");
 
 const regDataController =async(req,res)=>{
@@ -12,7 +12,7 @@ const regDataController =async(req,res)=>{
     const hashPassword = await bcrypt.hash(pass,10);
     
     const record = new userCollection({
-     userName: fName,
+    userName: fName,
     userEmail: email,
     userPass: hashPassword,
     });
