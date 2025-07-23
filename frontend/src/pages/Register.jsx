@@ -2,19 +2,34 @@ import React , { useState } from 'react'
 import { FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEyeSlash ,FaEye } from "react-icons/fa";
+import toast from 'react-hot-toast';
 
 const Register = () => {
      const navigate = useNavigate();
     const [showpass, setShowPass] = useState(false);
     const [form ,setform] = useState({fName:"",email:"" ,pass:""});
 
-    function handelForm(e){
+    async function handelForm(e){
         e.preventDefault();
-         fetch("/api/regdata",{
+        try {
+            
+        const response= await fetch("/api/regdata",{
             method:"POST",
-            headers:{"Content-Type":"application.json"},
+            headers:{"Content-Type":"application/json"},
             body:JSON.stringify(form),
         });
+        const result = await response.json();
+        if(response.ok){
+            toast.success(result.message);
+            navigate("/login")
+        }else{
+            toast.error(result.message);
+        }
+        console.log(result);
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
     function handleChange(e){
