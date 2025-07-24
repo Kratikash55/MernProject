@@ -1,6 +1,7 @@
 const api = require("express").Router();
 const userController =require("../controller/user");
 const adminController = require("../controller/admin");
+const uploads = require("../middleware/multer");
 
 api.get("/",(req,res)=>{
     res.send("Hello Backend");
@@ -10,7 +11,7 @@ api.post("/regdata",userController.regDataController);
 
 api.post("/loginuser",userController.loginDataController);
 
-api.post("/addadminproduct",adminController.addadminProductController);
+api.post("/addadminproduct",uploads.single("image") , adminController.addadminProductController);
 
 api.get("/getproduct",adminController.getAllProductController);
 
@@ -29,5 +30,7 @@ api.get("/userAllQuery",adminController.userAllQueryController);
 api.delete("/deletequery/:abc",adminController.deleteQueryController);
 
 api.get("/querysingledata/:abc",adminController.singlequeryController);
+
+api.post("/mailreply",adminController.mailreplyController);
 
 module.exports = api; 

@@ -3,19 +3,21 @@ const QueryCollection = require("../models/query");
 
 const addadminProductController = async (req,res) => {
     try {
-    const { Pname ,price ,cat } = req.body;
+      console.log(req.body);
+      console.log(req.file);
+    // const { Pname ,price ,cat } = req.body;
 
-    if(!Pname || !price || !cat){
-        return res.status(400).json({message:"All Fields are required"});
-    }
-    const record = new productCollection({
-    productName:Pname,
-    productPrice: price,
-    productCategory:cat,
-    });
+    // if(!Pname || !price || !cat){
+    //     return res.status(400).json({message:"All Fields are required"});
+    // }
+    // const record = new productCollection({
+    // productName:Pname,
+    // productPrice: price,
+    // productCategory:cat,
+    // });
 
-    await record.save();
-    res.status(200).json({message:"Successfully Insert Product"});
+    // await record.save();
+    // res.status(200).json({message:"Successfully Insert Product"});
     } catch (error) {
         res.stauts(500).json({message:"Internal Server Error"});
     }
@@ -90,12 +92,44 @@ const deleteQueryController = async(req,res)=>{
 const singlequeryController = async (req, res) => {
   try {
     const id = req.params.abc;
-    const record = await queryCollection.findById(id);
+    const record = await QueryCollection.findById(id);
     res.status(200).json({ data: record });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+const mailreplyController = async (req,res)=>{
+      try {
+    const { to, sub, body } = req.body;
+    const id = req.params.abc;
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "shivangsha350@gmail.com",
+        pass: "isrluqaunwephlts",
+      },
+    });
+
+    const info = transporter.sendMail({
+      from: '"QuickZY" <shivangsha350@gmail.com>',
+      to: to,
+      subject: sub,
+      text: body, // plain‑text body
+      html: body, // HTML body
+    });
+    await QueryCollection.findByIdAndUpdate(id, {
+      Querystatus: "Read",
+    });
+    res.status(200).json({ message: "Successfully Reply 🤪" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error..😓" });
+  }
+};
+
 
 module.exports ={
      addadminProductController,
@@ -106,4 +140,5 @@ module.exports ={
      userAllQueryController,
      deleteQueryController,
      singlequeryController,
+     mailreplyController,
 };
