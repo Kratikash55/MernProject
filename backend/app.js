@@ -10,6 +10,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/eShop").then(()=>{
     console.log(error);
 });
 
+
+app.use(express.static("/public"));
 app.use(express.json());
 app.use("/api",apiRouter);
 let port = process.env.PORT || 5000;

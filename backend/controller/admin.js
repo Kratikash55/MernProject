@@ -3,23 +3,23 @@ const QueryCollection = require("../models/query");
 
 const addadminProductController = async (req,res) => {
     try {
-      console.log(req.body);
-      console.log(req.file);
-    // const { Pname ,price ,cat } = req.body;
+      const Pimage = req.file.filename;
+    const { Pname ,price ,cat } = req.body;
 
-    // if(!Pname || !price || !cat){
-    //     return res.status(400).json({message:"All Fields are required"});
-    // }
-    // const record = new productCollection({
-    // productName:Pname,
-    // productPrice: price,
-    // productCategory:cat,
-    // });
+    if(!Pname || !price || !cat){
+        return res.status(400).json({message:"All Fields are required"});
+    }
+    const record = new productCollection({
+    productName:Pname,
+    productPrice: price,
+    productCategory:cat,
+    productImage:Pimage,
+    });
 
-    // await record.save();
-    // res.status(200).json({message:"Successfully Insert Product"});
+    await record.save();
+    res.status(200).json({message:"Successfully Insert Product"});
     } catch (error) {
-        res.stauts(500).json({message:"Internal Server Error"});
+        res.status(500).json({message:"Internal Server Error"});
     }
 }
 
@@ -54,7 +54,7 @@ const editValueDtataController= async(req,res)=>{
 
 const updateProductController = async (req,res)=>{
     try {
-    const {Pname , Pprice , cat , Pststus} = req.body;
+    const {Pname , Pprice , cat , Pstatus} = req.body;
     const id = req.params.abc;
 
     await productCollection.findByIdAndUpdate(id,{

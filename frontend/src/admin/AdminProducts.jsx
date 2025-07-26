@@ -63,7 +63,7 @@ return (
         products.map((items,index)=>(
         <div key={index} className='bg-white rounded-xl shadow p-4 hover:shadow-xl transition '>
 
-        <img src="assdd" alt="Product img" className='w-full h-40 object-cover rounded-md mb-4 border' />
+        <img src={`/uploads/${items.productImage}`} alt="Product img" className='w-full h-40 object-cover rounded-md mb-4 border' />
 
         <h1 className='text-xl font-semibold text-gray-700'>{items.productName}</h1>
 

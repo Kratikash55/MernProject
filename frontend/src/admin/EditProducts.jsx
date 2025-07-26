@@ -26,7 +26,7 @@ const EditProducts= () => {
 
   async function handleForm(e){
     try {
-      e.prevent.default();
+    e.preventDefault();
     const FormData = {Pname:edit.productName,
     Pprice : edit.productPrice ,
     cat :edit.productCategory,

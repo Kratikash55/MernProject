@@ -1,9 +1,12 @@
 import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
+import {useDispatch} from 'react-redux';
+import { addToCart } from '../features/cartSlice';
 
 const Products = () => {
     const[product ,setProduct] = useState([]);
+    const dispatch = useDispatch();
 
     async function productsData (){
         try {
@@ -30,15 +33,15 @@ return (
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-7'>
         {
             product.map((item)=>(
-            <div div key={item._id} className='bg-white shadow rounded-lg p-4 hover:shadow-lg transition '>
+            <div key={item._id} className='bg-white shadow rounded-lg p-4 hover:shadow-lg transition '>
 
-            <img src="ettt453" alt="Product image"  className='w-full h-32 object-cover rounded'/>
+            <img src={`/uploads/${item.productImage}`} alt="Product image"  className='w-full h-32 object-cover rounded'/>
 
             <h3 className='mt-2 font-medium text-gray-700'>{item.productName}</h3>
 
              <p className='text-green-600 font-bold'>Price:- ₹{item.productPrice}</p>
 
-            <button className='mt-2 w-full bg-green-600 text-white py-1 rounded hover:bg-green-700'>Add To Cart</button>
+            <button onClick={()=>{dispatch(addToCart(item))}} className='mt-2 w-full bg-green-600 text-white py-1 rounded hover:bg-green-700'>Add To Cart</button>
         </div>
     ))}
 </div>

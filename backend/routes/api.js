@@ -11,7 +11,11 @@ api.post("/regdata",userController.regDataController);
 
 api.post("/loginuser",userController.loginDataController);
 
-api.post("/addadminproduct",uploads.single("image") , adminController.addadminProductController);
+api.post(
+  "/addadminproduct",
+  uploads.single("image"),
+  adminController.addadminProductController
+);
 
 api.get("/getproduct",adminController.getAllProductController);
 
