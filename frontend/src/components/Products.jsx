@@ -11,13 +11,12 @@ const Products = () => {
 
     const dispatch = useDispatch();
 
-    async function productsData (){
+    async function productsData (selectCategory = "All"){
         try {
-    const response =  await fetch("/api/userproducts"); 
+    const response =  await fetch(`/api/userproducts?category=${selectCategory}`); 
     const record = await response.json();
-    
+   
     if(response.ok){
-        console.log(record);
         setProduct(record.data)
     }else{
         console.log(record);
@@ -27,7 +26,7 @@ const Products = () => {
         }
     }
 
-    useEffect(()=>{ productsData()},[]);
+    useEffect(()=>{ productsData(category)},[category]);
    
 return (
     <section className='py-10 px-6 max-w-7xl mx-auto'>
@@ -40,7 +39,7 @@ return (
             product.map((item)=>(
             <div key={item._id} className='bg-white shadow rounded-lg p-4 hover:shadow-lg transition '>
 
-            <img src={`/uploads/${item.productImage}`} alt="Product image"  className='w-full h-32 object-cover rounded'/>
+            <img src={`/uploads/${item.productImage}`} alt="Product image"  className='w-full h-32 object-contain rounded'/>
 
             <h3 className='mt-2 font-medium text-gray-700'>{item.productName}</h3>
 
