@@ -3,9 +3,12 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import {useDispatch} from 'react-redux';
 import { addToCart } from '../features/cartSlice';
+import Category from '../components/Category';
 
 const Products = () => {
     const[product ,setProduct] = useState([]);
+    const [category,setCategory] = useState("All");
+
     const dispatch = useDispatch();
 
     async function productsData (){
@@ -28,6 +31,8 @@ const Products = () => {
    
 return (
     <section className='py-10 px-6 max-w-7xl mx-auto'>
+          <Category onSelectCategory={setCategory}/>
+          
         <h2 className='text-2xl font-semibold text-gray-600 mb-6'>Treading Products 🔥</h2>
 
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-7'>

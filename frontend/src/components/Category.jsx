@@ -5,7 +5,7 @@ import { GiFingernail } from "react-icons/gi";
 
 
 
-const Category = () => {
+const Category = ({onSelectCategory}) => {
 
     const Categories =[
     {name : "All" ,icon : <AiFillProduct/>} ,
@@ -19,12 +19,14 @@ const Category = () => {
     ];
 
     return (
-        <div className='bg-white shadow-sm mt-20 w-full'>
+        <div className='bg-white m-2 w-full'>
             <div className='max-w-7xl mx-auto px-4'>
             <div className='flex sm:justify-center overflow-x-auto'>
                 {
                     Categories.map((cat, index)=>(
-                        <div key={index} className='flex flex-col items-center min-w-[80px] text-sm text-gray-800 hover:text-green-600 hover:cursor-pointer'>
+                        <div key={index} 
+                        onClick={()=>{onSelectCategory(cat.name)}}
+                        className='flex flex-col items-center min-w-[80px] text-sm text-gray-800 hover:text-green-600 hover:cursor-pointer'>
                              <div className='text-2xl mb-1'>{cat.icon}</div>
                               <div className='text-center'>{cat.name}</div>
                         </div>

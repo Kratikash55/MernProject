@@ -37,4 +37,8 @@ api.get("/querysingledata/:abc",adminController.singlequeryController);
 
 api.post("/mailreply",adminController.mailreplyController);
 
+api.post("/cart/save",userController.saveCartController);
+
+api.get("/cart/:userId",userController.getCartController)
+
 module.exports = api; 

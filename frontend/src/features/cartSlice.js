@@ -1,4 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
+
+export const saveCart = createAsyncThunk("cart/save",async(cartData)=>{
+   const response =await fetch("/api/cart/save",{
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(cartData)
+    });
+
+    return await response.json();
+});
+
+export const fetchCart = createAsyncThunk("cart/fetch",async (userId)=>{
+    const response = await fetch(`/api/cart/${userId}`);
+    return await response.json();
+});
 
 const initialState ={
     CartItems : [],
@@ -31,7 +46,7 @@ export const cartSlice = createSlice({
        },
 
         carttotalPrice: (state) => {
-      const { totalPrice, totalQuantity } = state.CartItems.reduce(
+      const { TotalPrice, TotalQuantity } = state.CartItems.reduce(
         (cartTotal, cartItem) => {
           const { quantity, productPrice } = cartItem;
           const itemsTotal = parseFloat(productPrice) * parseFloat(quantity);
@@ -39,16 +54,47 @@ export const cartSlice = createSlice({
           cartTotal.TotalQuantity += quantity;
           return cartTotal;
         },
-        // {
-        //   TotalPrice: 0,
-        //   TotalQuantity: 0,
-        // }
+        {
+          TotalPrice: 0,
+          TotalQuantity: 0,
+        }
       );
-      state.TotalPrice = totalPrice.toFixed(2);
-      state.TotalQuantity = totalQuantity;
+      state.TotalPrice = TotalPrice.toFixed(2);
+      state.TotalQuantity = TotalQuantity;
     },
+
+        IncrementQuantity : (state,action)=> {
+            state.CartItems = state.CartItems.map((item)=>{
+                if(item._id === action.payload._id){
+                    return {...item , quantity : item.quantity +1};
+                }
+                return item;
+            })
+        },
+
+        DecrementQuantity : (state,action)=> {
+        state.CartItems = state.CartItems.map((item)=>{
+            if(item._id === action.payload._id){
+            return {...item , quantity : item.quantity > 1 ? item.quantity -1 : 1};
+            }
+            return item;
+            });
+        }
     },
+    extraReducers:(builder)=>{
+    builder.addCase(fetchCart.fulfilled, (state, action) => {
+    console.log("fetchComplete", action.payload);
+        state.CartItems = action.payload.CartItems || [];
+        state.TotalPrice =action.payload.TotalPrice || 0;
+        state.TotalQuantity= action.payload.TotalQuantity || 0;
+
+});
+      
+     builder.addCase(saveCart.fulfilled, (state, action) => {
+      console.log("Cart Save..", action.payload);
+    });
+    }
 });
 
-export const {addToCart , deleteCartItems , carttotalPrice} = cartSlice.actions;
+export const {addToCart , deleteCartItems , carttotalPrice , IncrementQuantity ,DecrementQuantity} = cartSlice.actions;
 export default cartSlice.reducer

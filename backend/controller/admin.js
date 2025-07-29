@@ -2,26 +2,25 @@ const productCollection = require("../models/Product");
 const QueryCollection = require("../models/query");
 
 const addadminProductController = async (req,res) => {
-    try {
-      const Pimage = req.file.filename;
-    const { Pname ,price ,cat } = req.body;
-
-    if(!Pname || !price || !cat){
-        return res.status(400).json({message:"All Fields are required"});
+   try {
+    const Pimage = req.file.filename;
+    const { Pname, Price, cat } = req.body;
+    if (!Pname || !Price || !cat) {
+      return res.status(400).json({ message: "All fields are required 😓" });
     }
     const record = new productCollection({
-    productName:Pname,
-    productPrice: price,
-    productCategory:cat,
-    productImage:Pimage,
+      productName: Pname,
+      productPrice: Price,
+      productCategory: cat,
+      productImage: Pimage,
     });
-
     await record.save();
-    res.status(200).json({message:"Successfully Insert Product"});
-    } catch (error) {
-        res.status(500).json({message:"Internal Server Error"});
-    }
-}
+    res.status(200).json({ message: "Successfully Insert Product..😍" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error..😓" });
+  }
+};
+
 
 const getAllProductController = async (req,res)=>{
     try {

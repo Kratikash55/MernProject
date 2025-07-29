@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { CiSquareMinus ,CiSquarePlus  } from "react-icons/ci";
 import { useDispatch, useSelector } from 'react-redux';
 import { FaTrash } from "react-icons/fa6";
-import { deleteCartItems} from '../features/cartSlice';
+import { carttotalPrice, DecrementQuantity, deleteCartItems, fetchCart, IncrementQuantity, saveCart} from '../features/cartSlice';
 
 
 const Cart = () => {
@@ -14,6 +14,25 @@ const dispatch = useDispatch();
 const cartData = useSelector((state)=>state.Cart.CartItems);
 const cartAllValue = useSelector((state)=>state.Cart);
 
+useEffect(()=>{
+  dispatch(carttotalPrice());
+},[cartData,dispatch]);
+
+useEffect(()=>{
+  if(cartData.length > 0){
+dispatch(saveCart({
+    userId: "6872099025ed9ff252db2ab5",
+    carItems:cartData,
+    TotalPrice:cartAllValue.TotalPrice,
+    TotalQuantity:cartAllValue.TotalQuantity
+  }))
+  }
+  
+},[cartData, cartAllValue, dispatch]);
+
+useEffect(()=>{
+  dispatch(fetchCart("6872099025ed9ff252db2ab5"));
+},[dispatch]);
 
 return (
 <div className='fixed inset-0 bg-back bg-opacity-40 backdrop-blur-sm flex justify-center items-center z-50'>
@@ -29,18 +48,24 @@ return (
 {
   cartData.map((value,index)=>(
     <ul key={index} className='divide-y divide-gray-300 '>
-        <li className='flex items-center gap-5 py-4'>
+      <li className='flex items-center gap-5 py-4'>
 
-          <img src="sfhh" alt="ProductImage" className='w-16 h-16 object-cover rounded border '/>
+      <img src={`/uploads/${value.productImage}`} alt="ProductImage" className='w-16 h-16 object-cover rounded border '/>
         
       <div className='flex-1 '>
         <h3 className='font-semibold text-gray-700 '>{value.productName}</h3>
         <p className='text-sm text-gray-500 '>Price:- ₹{value.productPrice}</p>
       
       <div className='flex items-center mt-2 gap-2'>
-        <button className=' text-green-500 hover:text-green-700 text-2xl'><CiSquareMinus/></button>
+        <button className=' text-green-500 hover:text-green-700 text-2xl' onClick={()=>{dispatch(DecrementQuantity(value))}}>
+          <CiSquareMinus/>
+        </button>
+
         <span className='px-2'>{value.quantity}</span>
-        <button className=' text-green-500 hover:text-green-700 text-2xl'><CiSquarePlus /></button>
+        <button className=' text-green-500 hover:text-green-700 text-2xl' onClick={()=>{dispatch(IncrementQuantity(value))}}>
+        <CiSquarePlus />
+        </button>
+
       </div>
       </div>
       
@@ -54,7 +79,7 @@ return (
       {/* Total  */}
   <div className='mt-6 text-right'>
     <p className='text-lg font-semibold text-gray-800'>Total Price:-  
-      <span className='text-green-500'> ₹ {cartAllValue.totalPrice} </span>
+      <span className='text-green-500'> ₹ {cartAllValue.TotalPrice} </span>
     </p>
 
     <button className='mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition shadow-lg'>CheckOut</button>
